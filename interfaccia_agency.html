@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All4U | Crea nuova ricerca</title>
+  <style>
+    :root {
+      --bg: #08111d;
+      --panel: rgba(13, 27, 42, 0.96);
+      --panel-2: #0f2238;
+      --line: #1f3b5c;
+      --text: #edf4ff;
+      --muted: #9ab0c9;
+      --accent: #56c2ff;
+      --accent-2: #2f89ff;
+      --ok: #1fc98a;
+      --warn: #ffbe3d;
+      --danger: #ff5d79;
+      --shadow: 0 14px 34px rgba(0, 0, 0, 0.28);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: radial-gradient(circle at top, #10233a 0%, #08111d 55%);
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 28px 20px 56px;
+    }
+
+    .hero,
+    .panel,
+    .sidebar-card,
+    .preview-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 26px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .hero-left h1 {
+      margin: 0 0 8px;
+      font-size: 34px;
+      letter-spacing: -0.03em;
+    }
+
+    .hero-left p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 840px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #0d1d2f;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .sidebar-card {
+      padding: 20px;
+      position: sticky;
+      top: 20px;
+    }
+
+    .sidebar-card h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .sidebar-card p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .nav {
+      display: grid;
+      gap: 10px;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: var(--text);
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      background: #0a1625;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 14px;
+      transition: 0.2s ease;
+    }
+
+    .nav a:hover {
+      transform: translateY(-1px);
+      border-color: var(--accent);
+    }
+
+    .main {
+      display: grid;
+      gap: 20px;
+    }
+
+    .panel {
+      padding: 24px;
+    }
+
+    .section-title {
+      margin: 0 0 6px;
+      font-size: 24px;
+    }
+
+    .section-subtitle {
+      margin: 0 0 20px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      background: #0a1625;
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 13px 14px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #0a1625;
+      border: 1px solid var(--line);
+      font-size: 14px;
+    }
+
+    .chip input {
+      width: auto;
+      margin: 0;
+      padding: 0;
+    }
+
+    .preview-card {
+      padding: 18px;
+      background: #0a1625;
+      border-radius: var(--radius-lg);
+    }
+
+    .preview-card h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .preview-block {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .preview-block:first-of-type {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+    }
+
+    .preview-block strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .preview-block span {
+      color: var(--text);
+      line-height: 1.55;
+      font-size: 14px;
+      word-break: break-word;
+      white-space: pre-line;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    .btn {
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 13px 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn.primary {
+      background: linear-gradient(90deg, var(--accent-2), var(--accent));
+      border-color: transparent;
+      color: white;
+    }
+
+    .btn.warn {
+      background: #2d2108;
+      border-color: #6b4e0a;
+      color: #ffe6aa;
+    }
+
+    .btn.reset {
+      background: #2a1420;
+      border-color: #5f2a45;
+      color: #ffd9e1;
+    }
+
+    .msg {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      display: none;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .msg.ok {
+      display: block;
+      background: rgba(31, 201, 138, 0.12);
+      border: 1px solid rgba(31, 201, 138, 0.4);
+      color: #cffff0;
+    }
+
+    .msg.err {
+      display: block;
+      background: rgba(255, 93, 121, 0.12);
+      border: 1px solid rgba(255, 93, 121, 0.4);
+      color: #ffd9e1;
+    }
+
+    @media (max-width: 1060px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+      .sidebar-card {
+        position: static;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-left h1 {
+        font-size: 28px;
+      }
+      .hero, .panel, .sidebar-card {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <div class="hero-left">
+        <h1>Crea nuova ricerca</h1>
+        <p>Compila i dati interni, seleziona i must del cliente, genera l’annuncio pubblico e salva il job post nel foglio.</p>
+      </div>
+      <div class="badge">All4U Talent Platform · Agency Side</div>
+    </section>
+
+    <div class="layout">
+      <aside class="sidebar-card">
+        <h2>Flusso corretto</h2>
+        <p>Compila i parametri interni, definisci i must e le preferenze, genera l’annuncio pubblico e salva solo quando il preview è corretto.</p>
+        <nav class="nav">
+          <a href="#base">Informazioni base</a>
+          <a href="#filtro">Parametri interni</a>
+          <a href="#fondamentali">Must cliente</a>
+          <a href="#preferenziali">Preferenziali</a>
+          <a href="#annuncio">Annuncio candidato</a>
+          <a href="#preview">Anteprima pubblica</a>
+        </nav>
+      </aside>
+
+      <main class="main">
+        <form id="jobPostForm">
+          <section class="panel" id="base">
+            <h2 class="section-title">Informazioni base</h2>
+            <p class="section-subtitle">Dati identificativi interni della ricerca.</p>
+            <div class="grid">
+              <div class="field">
+                <label for="cliente">Cliente interno *</label>
+                <input type="text" id="cliente" required>
+              </div>
+              <div class="field">
+                <label for="progetto">Progetto interno *</label>
+                <input type="text" id="progetto" required>
+              </div>
+              <div class="field">
+                <label for="ruolo">Ruolo richiesto *</label>
+                <input type="text" id="ruolo" required>
+              </div>
+              <div class="field">
+                <label for="jobCode">Codice ricerca *</label>
+                <input type="text" id="jobCode" required>
+              </div>
+              <div class="field">
+                <label for="statoPosizione">Stato posizione *</label>
+                <select id="statoPosizione" required>
+                  <option value="Aperta">Aperta</option>
+                  <option value="Chiusa">Chiusa</option>
+                  <option value="Bozza">Bozza</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="areaAmmessa">Area interna ammessa *</label>
+                <input type="text" id="areaAmmessa" required>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel" id="filtro">
+            <h2 class="section-title">Parametri interni</h2>
+            <p class="section-subtitle">Questi campi restano interni e non vengono mostrati al candidato.</p>
+            <div class="grid">
+              <div class="field">
+                <label for="scoreMinimo">Score finale minimo *</label>
+                <input type="number" id="scoreMinimo" min="0" max="100" required>
+              </div>
+              <div class="field">
+                <label for="automunitaObbligatoria">Automunita obbligatoria</label>
+                <select id="automunitaObbligatoria">
+                  <option value="Si">Sì</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="altezzaMinima">Sbarramento altezza minima</label>
+                <input type="number" id="altezzaMinima" min="160" value="160">
+              </div>
+              <div class="field">
+                <label for="filtroEta">Filtro età (interno)</label>
+                <input type="text" id="filtroEta">
+              </div>
+              <div class="field full">
+                <label for="lingueRichieste">Lingue richieste</label>
+                <input type="text" id="lingueRichieste" placeholder="Es. Italiano, Inglese">
+              </div>
+              <div class="field full">
+                <label for="attestatiObbligatori">Attestati obbligatori</label>
+                <input type="text" id="attestatiObbligatori">
+              </div>
+              <div class="field full">
+                <label for="attestatiPreferenziali">Attestati preferenziali</label>
+                <input type="text" id="attestatiPreferenziali">
+              </div>
+            </div>
+          </section>
+
+          <section class="panel" id="fondamentali">
+            <h2 class="section-title">Must cliente</h2>
+            <div class="chips">
+              <label class="chip"><input type="checkbox" name="must" value="CV obbligatorio"> CV obbligatorio</label>
+              <label class="chip"><input type="checkbox" name="must" value="Foto viso obbligatoria"> Foto viso obbligatoria</label>
+              <label class="chip"><input type="checkbox" name="must" value="Foto figura intera obbligatoria"> Foto figura intera obbligatoria</label>
+              <label class="chip"><input type="checkbox" name="must" value="Privacy obbligatoria"> Privacy obbligatoria</label>
+              <label class="chip"><input type="checkbox" name="must" value="Automunita"> Automunita</label>
+              <label class="chip"><input type="checkbox" name="must" value="Area compatibile"> Area compatibile</label>
+              <label class="chip"><input type="checkbox" name="must" value="Esperienza minima"> Esperienza minima</label>
+              <label class="chip"><input type="checkbox" name="must" value="Altezza"> Altezza</label>
+              <label class="chip"><input type="checkbox" name="must" value="Lingua straniera"> Lingua straniera</label>
+              <label class="chip"><input type="checkbox" name="must" value="Disponibilita weekend"> Disponibilità weekend</label>
+              <label class="chip"><input type="checkbox" name="must" value="Attestati richiesti"> Attestati richiesti</label>
+            </div>
+          </section>
+
+          <section class="panel" id="preferenziali">
+            <h2 class="section-title">Preferenziali</h2>
+            <div class="chips">
+              <label class="chip"><input type="checkbox" name="nice" value="Inglese"> Inglese</label>
+              <label class="chip"><input type="checkbox" name="nice" value="Esperienza eventi"> Esperienza eventi</label>
+              <label class="chip"><input type="checkbox" name="nice" value="Disponibilita weekend"> Disponibilità weekend</label>
+              <label class="chip"><input type="checkbox" name="nice" value="Esperienza luxury"> Esperienza luxury</label>
+              <label class="chip"><input type="checkbox" name="nice" value="Seniorita"> Seniorità</label>
+              <label class="chip"><input type="checkbox" name="nice" value="Standing elevato"> Standing elevato</label>
+              <label class="chip"><input type="checkbox" name="nice" value="Altezza"> Altezza</label>
+              <label class="chip"><input type="checkbox" name="nice" value="Lingua straniera"> Lingua straniera</label>
+            </div>
+          </section>
+
+          <section class="panel" id="annuncio">
+            <h2 class="section-title">Annuncio candidato</h2>
+            <p class="section-subtitle">Qui finisce solo ciò che il candidato può vedere.</p>
+
+            <div class="actions" style="margin-top:0;">
+              <button class="btn primary" type="button" id="generateAdBtn">Genera annuncio candidato</button>
+            </div>
+
+            <div class="grid" style="margin-top:18px;">
+              <div class="field full">
+                <label for="annuncioTitolo">Titolo annuncio pubblico</label>
+                <input type="text" id="annuncioTitolo">
+              </div>
+              <div class="field full">
+                <label for="annuncioTesto">Testo annuncio pubblico</label>
+                <textarea id="annuncioTesto"></textarea>
+              </div>
+              <div class="field">
+                <label for="zonaLavoroPubblica">Zona lavoro pubblica</label>
+                <input type="text" id="zonaLavoroPubblica">
+              </div>
+              <div class="field">
+                <label for="statoPubblicazione">Stato pubblicazione</label>
+                <select id="statoPubblicazione">
+                  <option value="Bozza">Bozza</option>
+                  <option value="Pubblicato">Pubblicato</option>
+                  <option value="Archiviato">Archiviato</option>
+                </select>
+              </div>
+              <div class="field full">
+                <label for="requisitiPubblici">Requisiti pubblici</label>
+                <textarea id="requisitiPubblici"></textarea>
+              </div>
+              <div class="field full">
+                <label for="documentiRichiestiPubblici">Documenti richiesti pubblici</label>
+                <textarea id="documentiRichiestiPubblici"></textarea>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <h2 class="section-title">Note selezionatori</h2>
+            <div class="field full">
+              <label for="noteSelezionatori">Note interne</label>
+              <textarea id="noteSelezionatori"></textarea>
+            </div>
+            <div class="field" style="margin-top:18px;">
+              <label for="createdBy">Creato da</label>
+              <input type="text" id="createdBy">
+            </div>
+            <div class="actions">
+              <button class="btn primary" type="submit">Salva job post</button>
+              <button class="btn" type="button" id="previewBtn">Aggiorna anteprima</button>
+              <button class="btn warn" type="button" id="simulateBtn">Simula job posting</button>
+              <button class="btn reset" type="button" id="resetBtn">Reset</button>
+            </div>
+            <div id="formMessage" class="msg"></div>
+          </section>
+
+          <section class="panel" id="preview">
+            <h2 class="section-title">Anteprima pubblica candidato</h2>
+            <div class="preview-card">
+              <h3>Vista candidato</h3>
+              <div class="preview-block"><strong>Titolo annuncio</strong><span id="previewAnnuncioTitolo">—</span></div>
+              <div class="preview-block"><strong>Testo annuncio</strong><span id="previewAnnuncioTesto">—</span></div>
+              <div class="preview-block"><strong>Zona lavoro</strong><span id="previewZona">—</span></div>
+              <div class="preview-block"><strong>Requisiti</strong><span id="previewRequisiti">—</span></div>
+              <div class="preview-block"><strong>Documenti richiesti</strong><span id="previewDocumenti">—</span></div>
+              <div class="preview-block"><strong>Stato pubblicazione</strong><span id="previewStatoPubblicazione">—</span></div>
+            </div>
+          </section>
+        </form>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwAg1X1mPdUQuWTEj9pVwnxAO9cin7FPG9qV-R2lPdnBjsVJ5vvwhwOf5DzcS6fUQgtLw/exec";
+
+    function getCheckedValues(name) {
+      return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
+    }
+
+    function setCheckedValues(name, values) {
+      const checkedValues = Array.isArray(values) ? values : [];
+      document.querySelectorAll(`input[name="${name}"]`).forEach(el => {
+        el.checked = checkedValues.includes(el.value);
+      });
+    }
+
+    function showMessage(text, type = "ok") {
+      const box = document.getElementById("formMessage");
+      box.className = `msg ${type}`;
+      box.textContent = text;
+    }
+
+    function inferPublicContext(cliente, progetto, ruolo) {
+      const c = (cliente || "").toLowerCase();
+      const p = (progetto || "").toLowerCase();
+
+      if (c.includes("monza") || p.includes("lounge") || p.includes("stadio")) {
+        return {
+          title: `All4U ricerca ${ruolo || "personale hospitality"} per servizi hospitality in lounges stadio`,
+          intro: `All4U seleziona ${ruolo || "personale"} per attività di hospitality in contesto lounges stadio.`,
+          areaHint: "Monza Brianza / Milano"
+        };
+      }
+
+      if (c.includes("virgin") || p.includes("fitness") || p.includes("promo")) {
+        return {
+          title: `All4U ricerca ${ruolo || "Promoter"} per attività promozionali in contesto fitness`,
+          intro: `All4U seleziona ${ruolo || "Promoter"} per attività promozionali e di contatto con il pubblico in contesto sport e benessere.`,
+          areaHint: "Milano"
+        };
+      }
+
+      return {
+        title: `All4U ricerca ${ruolo || "personale"} per attività operative`,
+        intro: `All4U seleziona ${ruolo || "personale"} per attività operative e a contatto con il pubblico.`,
+        areaHint: document.getElementById("areaAmmessa").value.trim() || ""
+      };
+    }
+
+    function generatePublicRequirements() {
+      const reqs = [];
+      const lingue = document.getElementById("lingueRichieste").value.trim();
+      const attestatiObb = document.getElementById("attestatiObbligatori").value.trim();
+      const attestatiPref = document.getElementById("attestatiPreferenziali").value.trim();
+      const autoObb = document.getElementById("automunitaObbligatoria").value.trim();
+
+      reqs.push("serietà, puntualità e buona capacità relazionale");
+      if (lingue) reqs.push(`gradita conoscenza di: ${lingue}`);
+      if (autoObb === "Si") reqs.push("preferibile autonomia negli spostamenti");
+      if (attestatiObb) reqs.push(`eventuali attestati richiesti: ${attestatiObb}`);
+      if (attestatiPref) reqs.push(`costituiscono un plus: ${attestatiPref}`);
+
+      return "- " + reqs.join("\n- ");
+    }
+
+    function generatePublicDocuments() {
+      return "- CV aggiornato\n- foto viso\n- foto figura intera";
+    }
+
+    function generateAd() {
+      const cliente = document.getElementById("cliente").value.trim();
+      const progetto = document.getElementById("progetto").value.trim();
+      const ruolo = document.getElementById("ruolo").value.trim();
+      const area = document.getElementById("areaAmmessa").value.trim();
+      const context = inferPublicContext(cliente, progetto, ruolo);
+
+      document.getElementById("annuncioTitolo").value = context.title;
+      document.getElementById("zonaLavoroPubblica").value = area || context.areaHint;
+      document.getElementById("requisitiPubblici").value = generatePublicRequirements();
+      document.getElementById("documentiRichiestiPubblici").value = generatePublicDocuments();
+      document.getElementById("annuncioTesto").value = [
+        context.intro,
+        "",
+        "Cerchiamo persone affidabili, con buona presenza e predisposizione al contatto con il pubblico.",
+        "",
+        "Se pensi di avere il profilo adatto, inviaci la tua candidatura completa tramite il form All4U."
+      ].join("\n");
+
+      updatePublicPreview();
+    }
+
+    function updatePublicPreview() {
+      document.getElementById("previewAnnuncioTitolo").textContent = document.getElementById("annuncioTitolo").value.trim() || "—";
+      document.getElementById("previewAnnuncioTesto").textContent = document.getElementById("annuncioTesto").value.trim() || "—";
+      document.getElementById("previewZona").textContent = document.getElementById("zonaLavoroPubblica").value.trim() || "—";
+      document.getElementById("previewRequisiti").textContent = document.getElementById("requisitiPubblici").value.trim() || "—";
+      document.getElementById("previewDocumenti").textContent = document.getElementById("documentiRichiestiPubblici").value.trim() || "—";
+      document.getElementById("previewStatoPubblicazione").textContent = document.getElementById("statoPubblicazione").value.trim() || "—";
+    }
+
+    function buildPayload() {
+      const now = new Date().toISOString();
+
+      return {
+        action: "create_job",
+        timestamp: now,
+        job_id: `JOB_${Date.now()}`,
+        job_code: document.getElementById("jobCode").value.trim(),
+        cliente: document.getElementById("cliente").value.trim(),
+        progetto: document.getElementById("progetto").value.trim(),
+        ruolo: document.getElementById("ruolo").value.trim(),
+        stato_posizione: document.getElementById("statoPosizione").value.trim(),
+        area_ammessa: document.getElementById("areaAmmessa").value.trim(),
+        score_minimo: document.getElementById("scoreMinimo").value.trim(),
+        automunita_obbligatoria: document.getElementById("automunitaObbligatoria").value.trim(),
+        altezza_minima_preferenziale: document.getElementById("altezzaMinima").value.trim(),
+        filtro_eta: document.getElementById("filtroEta").value.trim(),
+        lingue_richieste: document.getElementById("lingueRichieste").value.trim(),
+        attestati_obbligatori: document.getElementById("attestatiObbligatori").value.trim(),
+        attestati_preferenziali: document.getElementById("attestatiPreferenziali").value.trim(),
+        chiavi_fondamentali: getCheckedValues("must").join("; "),
+        chiavi_preferenziali: getCheckedValues("nice").join("; "),
+        note_selezionatori: document.getElementById("noteSelezionatori").value.trim(),
+        created_by: document.getElementById("createdBy").value.trim(),
+        updated_at: now,
+        annuncio_titolo: document.getElementById("annuncioTitolo").value.trim(),
+        annuncio_testo: document.getElementById("annuncioTesto").value.trim(),
+        zona_lavoro_pubblica: document.getElementById("zonaLavoroPubblica").value.trim(),
+        requisiti_pubblici: document.getElementById("requisitiPubblici").value.trim(),
+        documenti_richiesti_pubblici: document.getElementById("documentiRichiestiPubblici").value.trim(),
+        stato_pubblicazione: document.getElementById("statoPubblicazione").value.trim()
+      };
+    }
+
+    function validatePayload(payload) {
+      const required = [
+        ["cliente", payload.cliente],
+        ["progetto", payload.progetto],
+        ["ruolo", payload.ruolo],
+        ["job_code", payload.job_code],
+        ["stato_posizione", payload.stato_posizione],
+        ["area_ammessa", payload.area_ammessa],
+        ["score_minimo", payload.score_minimo],
+        ["annuncio_titolo", payload.annuncio_titolo],
+        ["annuncio_testo", payload.annuncio_testo],
+        ["zona_lavoro_pubblica", payload.zona_lavoro_pubblica]
+      ];
+      return required.filter(([_, value]) => !value).map(([key]) => key);
+    }
+
+    async function postJob(payload) {
+      const response = await fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+
+      const text = await response.text();
+      return JSON.parse(text);
+    }
+
+    function resetFormCompletely() {
+      document.getElementById("jobPostForm").reset();
+      setCheckedValues("must", []);
+      setCheckedValues("nice", []);
+      updatePublicPreview();
+      showMessage("Form resettato.", "ok");
+    }
+
+    function fillFormWithSimulation(data) {
+      document.getElementById("cliente").value = data.cliente || "";
+      document.getElementById("progetto").value = data.progetto || "";
+      document.getElementById("ruolo").value = data.ruolo || "";
+      document.getElementById("jobCode").value = data.job_code || "";
+      document.getElementById("statoPosizione").value = data.stato_posizione || "Aperta";
+      document.getElementById("areaAmmessa").value = data.area_ammessa || "";
+      document.getElementById("scoreMinimo").value = data.score_minimo || "";
+      document.getElementById("automunitaObbligatoria").value = data.automunita_obbligatoria || "No";
+      document.getElementById("altezzaMinima").value = data.altezza_minima_preferenziale || "160";
+      document.getElementById("filtroEta").value = data.filtro_eta || "";
+      document.getElementById("lingueRichieste").value = data.lingue_richieste || "";
+      document.getElementById("attestatiObbligatori").value = data.attestati_obbligatori || "";
+      document.getElementById("attestatiPreferenziali").value = data.attestati_preferenziali || "";
+      document.getElementById("noteSelezionatori").value = data.note_selezionatori || "";
+      document.getElementById("createdBy").value = data.created_by || "Simulazione sistema";
+
+      setCheckedValues("must", data.mustValues || []);
+      setCheckedValues("nice", data.niceValues || []);
+
+      document.getElementById("annuncioTitolo").value = "";
+      document.getElementById("annuncioTesto").value = "";
+      document.getElementById("zonaLavoroPubblica").value = "";
+      document.getElementById("requisitiPubblici").value = "";
+      document.getElementById("documentiRichiestiPubblici").value = "";
+      document.getElementById("statoPubblicazione").value = "Bozza";
+
+      updatePublicPreview();
+    }
+
+    function buildSimulatedJobs() {
+      return [
+        {
+          cliente: "Virgin Active",
+          progetto: "Fitness Promo Activation",
+          ruolo: "Promoter",
+          job_code: "VA_PROMO_002",
+          stato_posizione: "Aperta",
+          area_ammessa: "MILANO",
+          score_minimo: 75,
+          automunita_obbligatoria: "No",
+          altezza_minima_preferenziale: 160,
+          filtro_eta: "Preferenza 20-35 con forte energia commerciale",
+          lingue_richieste: "Italiano",
+          attestati_obbligatori: "",
+          attestati_preferenziali: "",
+          note_selezionatori: "Cerchiamo profili dinamici, sorridenti, orientati alla conversione e all'engagement.",
+          created_by: "Simulazione sistema",
+          mustValues: ["CV obbligatorio", "Foto viso obbligatoria", "Privacy obbligatoria", "Altezza"],
+          niceValues: ["Esperienza eventi", "Disponibilita weekend", "Inglese"]
+        }
+      ];
+    }
+
+    let simulationIndex = 0;
+
+    document.getElementById("generateAdBtn").addEventListener("click", () => {
+      generateAd();
+      showMessage("Annuncio candidato generato. Puoi modificarlo a mano.", "ok");
+    });
+
+    document.getElementById("previewBtn").addEventListener("click", updatePublicPreview);
+
+    document.getElementById("simulateBtn").addEventListener("click", () => {
+      const jobs = buildSimulatedJobs();
+      const selected = jobs[simulationIndex % jobs.length];
+      simulationIndex++;
+      fillFormWithSimulation(selected);
+      showMessage("Job posting simulato caricato nel form.", "ok");
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      resetFormCompletely();
+    });
+
+    document.getElementById("jobPostForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const payload = buildPayload();
+      const missing = validatePayload(payload);
+
+      if (missing.length) {
+        showMessage(`Compila i campi obbligatori: ${missing.join(", ")}`, "err");
+        return;
+      }
+
+      updatePublicPreview();
+      showMessage("Salvataggio in corso...", "ok");
+
+      try {
+        const result = await postJob(payload);
+        if (result.success) {
+          showMessage("Job post salvato correttamente nel foglio Job Posts.", "ok");
+        } else {
+          showMessage(result.message || "Errore durante il salvataggio.", "err");
+        }
+      } catch (error) {
+        console.error(error);
+        showMessage("Errore di connessione verso Google Apps Script.", "err");
+      }
+    });
+
+    updatePublicPreview();
+  </script>
+</body>
+</html>
