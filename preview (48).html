@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All4U | Talent Platform Agenzia</title>
+  <style>
+    :root{
+      --bg:#101d31;
+      --panel:#0b1728;
+      --panel2:#13233a;
+      --card:rgba(255,255,255,.065);
+      --field:#071322;
+      --line:rgba(160,190,230,.22);
+      --line2:rgba(101,208,255,.38);
+      --text:#f4f8ff;
+      --muted:#aebbd0;
+      --accent:#65d0ff;
+      --accent2:#7cffc4;
+      --gold:#f0b84d;
+      --green:#59e39f;
+      --red:#ff6b87;
+      --yellow:#ffd166;
+      --shadow:0 24px 70px rgba(0,0,0,.34);
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:radial-gradient(circle at top left,rgba(101,208,255,.20),transparent 34%),linear-gradient(135deg,var(--bg),#071120 78%);color:var(--text);overflow:hidden}
+    button,input,select,textarea{font:inherit}
+    button{border:0;color:inherit;cursor:pointer}
+    .app{height:100vh;display:grid;grid-template-columns:270px 1fr;gap:16px;padding:16px}
+    .sidebar,.topbar,.card,.drawer{background:rgba(11,23,40,.94);border:1px solid var(--line);box-shadow:var(--shadow)}
+    .sidebar{border-radius:26px;padding:18px;display:flex;flex-direction:column;min-width:0}
+    .brand{display:flex;gap:12px;align-items:center;padding:8px 6px 18px;border-bottom:1px solid var(--line)}
+    .logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#10213b;font-weight:900}
+    .brand h1{font-size:15px;margin:0}.brand small,.muted,p,small{color:var(--muted)}
+    .nav{display:grid;gap:8px;margin-top:16px}.nav button{background:transparent;border:1px solid transparent;border-radius:16px;padding:12px;display:flex;align-items:center;justify-content:space-between;color:var(--muted)}.nav button.active,.nav button:hover{background:rgba(255,255,255,.08);border-color:var(--line);color:var(--text)}
+    .pill{font-size:11px;padding:4px 8px;border-radius:999px;background:rgba(101,208,255,.14);color:var(--accent)}
+    .sidebox{margin-top:auto;padding:14px;border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.055)}.sidebox p{font-size:12px;line-height:1.45}
+    .main{min-width:0;display:grid;grid-template-rows:auto 1fr;gap:16px;overflow:hidden}.topbar{border-radius:26px;padding:16px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:14px;position:relative}.live{position:absolute;top:9px;right:16px;font-size:12px;color:var(--accent);display:flex;gap:8px;align-items:center}.dot{width:8px;height:8px;border-radius:50%;background:var(--accent2);box-shadow:0 0 10px var(--accent2)}
+    h2{font-size:clamp(22px,2.6vw,34px);margin:0}h3{margin:0 0 12px}.title p{margin:4px 0 0;font-size:13px}.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}.btn{padding:10px 14px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid var(--line);white-space:nowrap}.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#10213b;font-weight:850}.btn.danger{background:rgba(255,107,135,.12);color:var(--red)}
+    .content{min-height:0;overflow:auto;padding-right:4px}.section{display:none}.section.active{display:block}.grid{display:grid;gap:16px}.cols4{grid-template-columns:repeat(4,minmax(0,1fr))}.cols3{grid-template-columns:repeat(3,minmax(0,1fr))}.cols2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .card{border-radius:24px;padding:16px}.metric strong{display:block;font-size:34px;margin-top:10px;letter-spacing:-.05em}.metric .trend{color:var(--accent2);font-size:12px;margin-top:6px}.toolbar{display:grid;grid-template-columns:minmax(220px,1fr) repeat(5,auto);gap:10px;margin-bottom:14px;align-items:center}.field,.select{background:var(--field);border:1px solid var(--line);color:var(--text);border-radius:14px;padding:11px 12px;outline:none;min-width:0}.view-toggle{display:flex;background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:14px;padding:4px}.view-toggle button{background:transparent;color:var(--muted);padding:8px 10px;border-radius:10px}.view-toggle button.active{background:rgba(101,208,255,.16);color:var(--accent)}
+    .db-grid{grid-template-columns:repeat(auto-fill,minmax(265px,1fr))}.profile-card,.job-card,.mini-card,.asset{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:12px}.profile-card{cursor:pointer}.profile-top{display:flex;gap:12px;align-items:center}.avatar{width:60px;height:60px;border-radius:18px;object-fit:cover;background:rgba(255,255,255,.1)}.big-avatar{width:96px;height:96px}.tags{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.tag{font-size:11px;padding:5px 8px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid var(--line);color:var(--muted)}.score-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}.bar{height:8px;border-radius:99px;background:rgba(255,255,255,.10);overflow:hidden}.bar span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))}.score{color:var(--accent2);font-weight:850}
+    .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:18px}table{width:100%;min-width:1050px;border-collapse:collapse}th,td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}th{color:var(--muted)}tr{cursor:pointer}tr:hover{background:rgba(255,255,255,.045)}
+    .job-layout{grid-template-columns:370px 1fr}.job-list{display:grid;gap:12px}.job-card{cursor:pointer}.job-card.active{border-color:var(--accent);background:rgba(101,208,255,.09)}.match-list{display:grid;gap:10px}.match-row{display:grid;grid-template-columns:54px 1fr auto;gap:12px;align-items:center;background:rgba(255,255,255,.055);border:1px solid var(--line);border-radius:18px;padding:10px;cursor:pointer}
+    .kanban{grid-template-columns:repeat(4,minmax(220px,1fr))}.column{background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:20px;padding:12px;min-height:360px}.column h4{display:flex;justify-content:space-between;margin:0 0 12px;color:var(--muted)}
+    .luxury-card{background:linear-gradient(135deg,rgba(3,13,28,.99),rgba(4,26,50,.95));border:1px solid var(--line2);border-radius:30px;padding:18px;display:grid;grid-template-columns:230px 1fr;gap:16px;box-shadow:0 0 42px rgba(101,208,255,.12)}.staff-side{border:1px solid rgba(101,208,255,.24);border-radius:22px;padding:16px;background:rgba(255,255,255,.035)}.staff-logo{font-size:34px;letter-spacing:-1px;margin-bottom:20px}.staff-status{display:inline-flex;gap:8px;align-items:center;padding:10px 14px;border-radius:999px;border:1px solid rgba(89,227,159,.35);color:var(--green);background:rgba(89,227,159,.09);font-weight:850;font-size:12px}.staff-line{display:grid;gap:4px;margin:15px 0}.staff-line small{text-transform:uppercase;font-size:11px}.staff-main{display:grid;grid-template-columns:1.1fr 1fr 1.1fr;gap:14px;min-width:0}.staff-photo-panel{display:grid;grid-template-columns:1.15fr .85fr;gap:12px}.staff-headshot,.staff-full{border:1px solid rgba(101,208,255,.36);border-radius:24px;background:#e8edf2;overflow:hidden;min-height:330px}.staff-headshot img,.staff-full img{width:100%;height:100%;object-fit:cover}.staff-name-panel{grid-column:1/-1;text-align:center;border:1px solid rgba(101,208,255,.24);border-radius:22px;padding:18px;background:rgba(255,255,255,.035)}.staff-name-panel h2{font-size:30px;letter-spacing:1px}.staff-name-panel h4{margin:4px 0 10px;color:var(--gold);letter-spacing:2px}.staff-box{border:1px solid rgba(101,208,255,.24);border-radius:22px;padding:16px;background:rgba(255,255,255,.035)}.staff-box h3{font-size:14px;text-transform:uppercase;letter-spacing:.5px}.info-row{display:grid;grid-template-columns:1fr auto;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.09);font-size:13px}.lang-row{margin:12px 0}.lang-top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}.goldbar{height:5px;background:rgba(255,255,255,.12);border-radius:99px;overflow:hidden}.goldbar span{display:block;height:100%;background:var(--gold)}.exp-row{display:grid;grid-template-columns:74px 1fr;gap:10px;align-items:center;margin:8px 0}.date-pill{background:rgba(101,208,255,.12);border:1px solid rgba(101,208,255,.25);padding:8px;border-radius:10px;font-size:12px;text-align:center}
+    .drawer{position:fixed;inset:16px 16px 16px auto;width:min(520px,calc(100vw - 32px));border-radius:26px;padding:18px;transform:translateX(calc(100% + 32px));transition:.24s;z-index:30;overflow:auto}.drawer.open{transform:translateX(0)}.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.detail-item{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:15px;padding:10px}.empty{padding:32px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:20px}.loader{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.25);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}#toast{position:fixed;bottom:20px;right:20px;background:rgba(0,0,0,.84);padding:12px 16px;border-radius:12px;border:1px solid var(--line);opacity:0;transition:.2s;z-index:999}.mobile-nav{display:none}
+    @media(max-width:1150px){body{overflow:auto}.app{grid-template-columns:1fr;height:auto;min-height:100vh}.sidebar{display:none}.mobile-nav{display:flex;gap:8px;overflow:auto;padding-bottom:6px}.topbar,.toolbar,.cols4,.cols3,.cols2,.kanban,.job-layout,.staff-main,.luxury-card{grid-template-columns:1fr}.actions{justify-content:flex-start}.live{position:static;order:-1}.staff-photo-panel{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand"><div class="logo">A4</div><div><h1>Talent Platform</h1><small>Agency Control Center</small></div></div>
+      <nav class="nav" id="sideNav"></nav>
+      <div class="sidebox"><strong>Connessione dati</strong><p>Master_Database, Jobs e matching candidati vengono letti dallo script Apps Script configurato in SCRIPT_URL.</p><button class="btn primary" style="width:100%" onclick="refreshAll()">Aggiorna dati</button><button class="btn" style="width:100%;margin-top:8px" onclick="showPhotoDiagnostics()">Diagnosi foto</button></div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="live"><span class="dot"></span><span id="connectionLabel">in attesa connessione</span></div>
+        <div class="title"><h2 id="pageTitle">Dashboard agenzia</h2><p id="pageSubtitle">Vista compatta dello stato selezioni, candidati e job post attivi.</p></div>
+        <div class="actions"><button class="btn" onclick="refreshAll()">Sincronizza Master DB</button><button class="btn" onclick="setSection('database')">Apri Database</button><button class="btn primary" onclick="setSection('jobs')">Vai ai Job Post</button></div>
+      </header>
+      <div class="mobile-nav" id="mobileNav"></div>
+      <section class="content">
+        <div id="dashboard" class="section active"></div>
+        <div id="jobbuilder" class="section">
+          <div class="card">
+            <h3>Crea Job Post</h3>
+            <p>Crea una nuova ricerca, genera titolo/testo annuncio e pubblicala nella tab <b>jobs</b>.</p>
+            <div class="grid cols2" style="margin-top:16px">
+              <input class="field" id="jbCliente" placeholder="Cliente">
+              <input class="field" id="jbProgetto" placeholder="Progetto">
+              <input class="field" id="jbRuolo" placeholder="Ruolo richiesto">
+              <input class="field" id="jbJobCode" placeholder="Codice ricerca">
+              <input class="field" id="jbArea" placeholder="Area ammessa">
+              <input class="field" id="jbScoreMin" type="number" placeholder="Score minimo">
+              <select class="field" id="jbAutomunita"><option value="Si">Automunita obbligatoria: Sì</option><option value="No">Automunita obbligatoria: No</option></select>
+              <input class="field" id="jbLingue" placeholder="Lingue richieste">
+            </div>
+            <div class="grid" style="margin-top:16px">
+              <textarea class="field" id="jbMust" placeholder="Chiavi fondamentali / requisiti hard"></textarea>
+              <textarea class="field" id="jbNice" placeholder="Chiavi preferenziali"></textarea>
+              <input class="field" id="jbTitolo" placeholder="Titolo annuncio pubblico">
+              <textarea class="field" id="jbTesto" placeholder="Testo annuncio pubblico"></textarea>
+              <textarea class="field" id="jbNote" placeholder="Note interne selezionatori"></textarea>
+            </div>
+            <div class="actions" style="margin-top:16px">
+              <button class="btn" onclick="simulateJobBuilder()">Simula AC Monza</button>
+              <button class="btn" onclick="generateJobCopy()">Genera titolo e testo</button>
+              <button class="btn primary" onclick="publishJob()">Pubblica su jobs</button>
+            </div>
+          </div>
+        </div>
+        <div id="database" class="section"></div>
+        <div id="jobs" class="section"></div>
+        <div id="pipeline" class="section"></div>
+        <div id="luxury" class="section"></div>
+      </section>
+    </main>
+  </div>
+  <aside class="drawer" id="drawer"></aside><div id="toast"></div>
+
+  <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzucS-xuUPl2Se-8Vc7-ZugQTRWPXkAHS7_VXvSKxXKZdCOqP7rrE00eI0bMog_KGjSnQ/exec';
+
+    const state = {
+      candidates: [],
+      jobs: [],
+      selectedJobId: null,
+      matches: [],
+      currentView: 'luxury',
+      query: '',
+      stage: 'all',
+      loading: false,
+      offline: false
+    };
+
+    const navItems = [
+      ['dashboard','DB','Dashboard','live','KPI e riepilogo operativo'],
+      ['jobbuilder','JB','Crea Job Post','create','Crea, genera e pubblica una nuova ricerca'],
+      ['database','MD','Master Database','DB','Tutti i candidati e le viste operative'],
+      ['jobs','JP','Job Post','matching','Candidati collegati ai vari job post'],
+      ['pipeline','PL','Pipeline','fasi','Stato selezione candidati'],
+      ['luxury','LC','Luxury Card','staff','Scheda visuale candidato']
+    ];
+
+    const fallbackCandidates = [
+      {id:'ALL4U-0099',nome:'Sofia De Luca',email:'sofia.deluca@all4u.it',telefono:'+39 340 1234567',citta:'Bergamo',ruolo:'Hostess / Promoter',stato:'Disponibile',score:94,visualScore:91,altezza:'169',lingue:'Italiano, Inglese C1, Spagnolo B2',patente:'B',foto:'',esperienze:'Hostess Autodromo Monza; Eventi corporate; Milano Fashion Week',certificazioni:'HACCP; Sicurezza sul lavoro; Primo soccorso',disponibilita:'Full time; Weekend; Trasferte nazionali'},
+      {id:'ALL4U-0100',nome:'Marco Rinaldi',email:'marco.rinaldi@all4u.it',telefono:'+39 340 555111',citta:'Milano',ruolo:'Steward Retail',stato:'Screening',score:88,visualScore:86,altezza:'181',lingue:'Italiano, Inglese B2',patente:'B',foto:'',esperienze:'Retail luxury; Fiera hospitality; Roadshow',certificazioni:'Sicurezza sul lavoro',disponibilita:'Weekend; Automunito'},
+      {id:'ALL4U-0101',nome:'Giulia Ferri',email:'giulia.ferri@all4u.it',telefono:'+39 340 555222',citta:'Roma',ruolo:'Brand Ambassador',stato:'Shortlist',score:91,visualScore:89,altezza:'168',lingue:'Italiano, Inglese C1, Francese B1',patente:'B',foto:'',esperienze:'Luxury retail; Accoglienza VIP; Eventi moda',certificazioni:'HACCP',disponibilita:'Full time; Trasferte'}
+    ];
+
+    const fallbackJobs = [
+      {id:'JOB-001',titolo:'Hostess Accrediti | Evento Pharma',cliente:'Cliente Enterprise',citta:'Milano',stato:'Pubblicato',data:'03/05/2026',must:'Inglese B2, esperienza eventi, weekend',scoreMin:80},
+      {id:'JOB-002',titolo:'Brand Ambassador Luxury Retail',cliente:'Boutique Partner',citta:'Roma',stato:'Pubblicato',data:'10/05/2026',must:'Luxury, retail, inglese',scoreMin:85},
+      {id:'JOB-003',titolo:'Steward Hospitality | Roadshow',cliente:'Agenzia eventi',citta:'Torino',stato:'Bozza',data:'15/05/2026',must:'Automunito, weekend',scoreMin:75}
+    ];
+
+    function h(v){return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;')}
+    function qs(id){return document.getElementById(id)}
+    function toast(msg){const t=qs('toast');t.textContent=msg;t.style.opacity='1';setTimeout(()=>t.style.opacity='0',2600)}
+
+    async function api(action, params = {}){
+      if(!SCRIPT_URL || SCRIPT_URL.includes('INSERISCI_QUI')) throw new Error('SCRIPT_URL non configurato');
+      const url = new URL(SCRIPT_URL);
+      url.searchParams.set('action', action);
+      Object.entries(params).forEach(([k,v]) => url.searchParams.set(k, v));
+      const res = await fetch(url.toString(), { method:'GET' });
+      if(!res.ok) throw new Error('Errore HTTP ' + res.status);
+      const data = await res.json();
+      if(data.success === false) throw new Error(data.message || 'Errore API');
+      return data;
+    }
+
+    async function apiAny(actions, params = {}){
+      const errors = [];
+      for(const action of actions){
+        try{
+          return await api(action, params);
+        }catch(err){
+          errors.push(action + ': ' + err.message);
+        }
+      }
+      throw new Error('Nessuna azione GET riconosciuta. Provate: ' + actions.join(', '));
+    }
+
+    function extractRows(payload, keys){
+      for(const key of keys){
+        if(Array.isArray(payload[key])) return payload[key];
+      }
+      if(Array.isArray(payload.data)) return payload.data;
+      if(Array.isArray(payload.rows)) return payload.rows;
+      if(Array.isArray(payload.result)) return payload.result;
+      if(Array.isArray(payload)) return payload;
+      return [];
+    }
+
+    function normalizeCandidate(row){
+      return {
+        id: row.master_candidate_id || row.application_id || row.id || row.ID || row['ID Staff'] || row.Candidate_ID || row.Codice || row.email || row.Email || crypto.randomUUID(),
+        nome: [row.nome || row.Nome || row.first_name || '', row.cognome || row.Cognome || row.last_name || ''].filter(Boolean).join(' ') || row['Nome e Cognome'] || row.name || row.Name || 'Candidato senza nome',
+        email: row.email || row.Email || '',
+        telefono: row.telefono || row.Telefono || row.Phone || '',
+        citta: row.citta || row.Citta || row.Città || row.Residenza || row.Domicilio || '',
+        ruolo: row.ruolo || row.Ruolo || row.ruolo_richiesta || row.Profilo || row['Ruolo target'] || row.progetto || 'Staff',
+        stato: row.review_status || row.stato_candidatura || row.stato || row.Stato || row.Fase || row.Stage || 'MASTER',
+        score: Number(row.score_finale || row.score || row.Score || row.MatchScore || row['Score totale'] || 0),
+        visualScore: Number(row.visualScore || row.VisualScore || row['Visual Fit Score'] || 0),
+        altezza: row.altezza || row.Altezza || '',
+        lingue: row.lingue || row.Lingue || row['Lingue Parlate'] || '',
+        patente: row.patente || row.Patente || '',
+        foto: row.foto_viso_drive_url || row.foto_figura_intera_drive_url || '',
+        foto_viso_drive_url: row.foto_viso_drive_url || '',
+        foto_figura_intera_drive_url: row.foto_figura_intera_drive_url || '',
+        cv: row.cv_drive_url || '',
+        cv_drive_url: row.cv_drive_url || '',
+        esperienze: row.esperienze_lavorative || row.esperienze || row.Esperienze || row['Esperienze Principali'] || '',
+        certificazioni: row.certificazioni || row.Certificazioni || '',
+        disponibilita: row.disponibilita || row.Disponibilita || row.Disponibilità || '',
+        raw: row
+      };
+    }
+
+    function normalizeJob(row){
+      return {
+        id: row.job_id || row.job_code || row.id || row.ID || row.Job_ID || row['Job ID'] || row.titolo || row.Titolo || crypto.randomUUID(),
+        titolo: row.annuncio_titolo || row.titolo_annuncio || row.ruolo_richiesta || row.ruolo || row.titolo || row.Titolo || row.JobTitle || row['Titolo ricerca'] || 'Job post senza titolo',
+        cliente: row.cliente || row.Cliente || row.Azienda || '',
+        citta: row.citta || row.Citta || row.Città || row.area_operativa || row.area_ammessa || row.zona_lavoro_pubblica || row.Location || '',
+        stato: row.stato_posizione || row.stato_pubblicazione || row.stato || row.Stato || row.Status || 'Aperta',
+        data: row.data || row.Data || row.Date || '',
+        must: row.must_have || row.chiavi_fondamentali || row.lingue_richieste || row.requisiti_pubblici || row.must || row.Must || row.MustHave || row['Must have'] || '',
+        scoreMin: Number(row.score_minimo || row.scoreMin || row.ScoreMin || row['Score minimo'] || 0),
+        raw: row
+      };
+    }
+
+    function scoreCandidateForJob(c,j){
+      let s = Number(c.score || 0);
+      const text = (c.ruolo+' '+c.citta+' '+c.lingue+' '+c.esperienze+' '+c.disponibilita).toLowerCase();
+      const must = String(j.must || '').toLowerCase().split(/[,;]+/).map(x=>x.trim()).filter(Boolean);
+      must.forEach(m => { if(text.includes(m.split(' ')[0])) s += 4; });
+      if(j.citta && c.citta && j.citta.toLowerCase() === c.citta.toLowerCase()) s += 6;
+      return Math.min(100, Math.round(s));
+    }
+
+    async function refreshAll(){
+      setLoading(true);
+      try{
+        const [masterData, intakeData, jobsData] = await Promise.all([
+          api('get_master_profiles'),
+          api('get_candidates'),
+          api('get_jobs')
+        ]);
+
+        const masterProfiles = extractRows(masterData, ['profiles','master','records']).map(normalizeCandidate);
+        const intakeCandidates = extractRows(intakeData, ['candidates','records']).map(normalizeCandidate);
+        state.candidates = masterProfiles.length ? masterProfiles : intakeCandidates;
+        state.intakeCandidates = intakeCandidates;
+        state.jobs = extractRows(jobsData, ['jobs','records']).map(normalizeJob);
+        state.offline = false;
+        qs('connectionLabel').textContent = 'LIVE - get_master_profiles / get_jobs';
+        toast('Master Database e job post aggiornati');
+      }catch(err){
+        state.candidates = fallbackCandidates.map(normalizeCandidate);
+        state.intakeCandidates = [];
+        state.jobs = fallbackJobs.map(normalizeJob);
+        state.offline = true;
+        qs('connectionLabel').textContent = 'demo locale - controlla Web App URL';
+        toast(err.message);
+      }
+      if(!state.selectedJobId && state.jobs[0]) state.selectedJobId = state.jobs[0].id;
+      renderAll();
+      setLoading(false);
+    }
+
+    function setLoading(v){state.loading=v;document.body.style.cursor=v?'progress':'default'}
+
+    function renderNav(){
+      qs('sideNav').innerHTML = navItems.map(n => `<button class="${n[0]==='dashboard'?'active':''}" onclick="setSection('${n[0]}')" data-nav="${n[0]}"><span><b>${n[1]}</b> ${n[2]}</span><span class="pill">${n[3]}</span></button>`).join('');
+      qs('mobileNav').innerHTML = navItems.map(n => `<button class="btn ${n[0]==='dashboard'?'primary':''}" onclick="setSection('${n[0]}')" data-mobile="${n[0]}">${n[2]}</button>`).join('');
+    }
+
+    function setSection(id){
+      document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+      qs(id).classList.add('active');
+      document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active',b.dataset.nav===id));
+      document.querySelectorAll('[data-mobile]').forEach(b=>b.classList.toggle('primary',b.dataset.mobile===id));
+      const item = navItems.find(n=>n[0]===id);
+      qs('pageTitle').textContent = item[2];
+      qs('pageSubtitle').textContent = item[4];
+      if(id==='luxury') renderLuxury();
+    }
+
+    function renderAll(){renderDashboard();renderDatabase();renderJobs();renderPipeline();renderLuxury()}
+
+    function metric(label,value,trend){return `<div class="card metric"><small>${h(label)}</small><strong>${h(value)}</strong><div class="trend">${h(trend)}</div></div>`}
+
+    function renderDashboard(){
+      const avg = state.candidates.length ? Math.round(state.candidates.reduce((s,c)=>s+(Number(c.score)||0),0)/state.candidates.length) : 0;
+      const liveJobs = state.jobs.filter(j=>String(j.stato).toLowerCase().includes('pubblic')).length;
+      qs('dashboard').innerHTML = `<div class="grid cols4">${metric('Candidati master',state.candidates.length,state.offline?'demo locale':'da Master_Database')}${metric('Job post',state.jobs.length,liveJobs+' pubblicati')}${metric('Matching medio',avg+'%','score candidati')}${metric('Vista attiva','Luxury','scheda staff')}</div><div class="grid cols2" style="margin-top:16px"><div class="card"><h3>Job post principali</h3><div class="job-list">${state.jobs.slice(0,4).map(jobMini).join('')||empty('Nessun job post')}</div></div><div class="card"><h3>Top candidati</h3><div class="grid db-grid">${state.candidates.slice().sort((a,b)=>b.score-a.score).slice(0,4).map(profileCard).join('')||empty('Nessun candidato')}</div></div></div>`;
+    }
+
+    function jobMini(j){return `<div class="asset" onclick="selectJob('${h(j.id)}');setSection('jobs')"><div><strong>${h(j.titolo)}</strong><span>${h(j.cliente)} · ${h(j.citta)} · ${h(j.stato)}</span></div><span class="pill">${h(j.scoreMin || 0)}+</span></div>`}
+    function empty(text){return `<div class="empty">${h(text)}</div>`}
+
+    function filteredCandidates(){
+      const q = state.query.toLowerCase();
+      return state.candidates.filter(c=>{
+        const blob = [c.id,c.nome,c.email,c.telefono,c.citta,c.ruolo,c.stato,c.lingue,c.esperienze,c.disponibilita].join(' ').toLowerCase();
+        const matchQ = !q || blob.includes(q);
+        const matchStage = state.stage === 'all' || String(c.stato).toLowerCase() === state.stage.toLowerCase();
+        return matchQ && matchStage;
+      });
+    }
+
+    function renderDatabase(){
+      const list = filteredCandidates();
+      const stages = ['all',...new Set(state.candidates.map(c=>c.stato).filter(Boolean))];
+      qs('database').innerHTML = `<div class="card"><div class="toolbar"><input class="field" placeholder="Cerca nel Master Database..." value="${h(state.query)}" oninput="state.query=this.value;renderDatabase()"><select class="select" onchange="state.stage=this.value;renderDatabase()">${stages.map(s=>`<option value="${h(s)}" ${state.stage===s?'selected':''}>${s==='all'?'Tutte le fasi':h(s)}</option>`).join('')}</select><div class="view-toggle"><button class="${state.currentView==='luxury'?'active':''}" onclick="state.currentView='luxury';renderDatabase()">Luxury</button><button class="${state.currentView==='grid'?'active':''}" onclick="state.currentView='grid';renderDatabase()">Griglia</button><button class="${state.currentView==='table'?'active':''}" onclick="state.currentView='table';renderDatabase()">Tabella</button></div><button class="btn" onclick="exportCsv()">Export</button><button class="btn primary" onclick="refreshAll()">Aggiorna</button></div><p>${list.length} profili visualizzati</p>${databaseView(list)}</div>`;
+    }
+
+    function databaseView(list){
+      if(!list.length) return empty('Nessun candidato trovato');
+      if(state.currentView==='luxury') return luxuryCard(list[0]);
+      if(state.currentView==='table') return `<div class="table-wrap"><table><thead><tr><th>ID</th><th>Nome</th><th>Ruolo</th><th>Città</th><th>Stato</th><th>Score</th><th>Lingue</th><th>Email</th></tr></thead><tbody>${list.map(c=>`<tr onclick="openCandidate('${h(c.id)}')"><td>${h(c.id)}</td><td>${h(c.nome)}</td><td>${h(c.ruolo)}</td><td>${h(c.citta)}</td><td>${h(c.stato)}</td><td>${h(c.score)}%</td><td>${h(c.lingue)}</td><td>${h(c.email)}</td></tr>`).join('')}</tbody></table></div>`;
+      return `<div class="grid db-grid">${list.map(profileCard).join('')}</div>`;
+    }
+
+    function extractDriveId(url){
+      const text=String(url||'').trim();
+      const patterns=[/\/file\/d\/([a-zA-Z0-9_-]{20,})/,/[?&]id=([a-zA-Z0-9_-]{20,})/,/thumbnail\?id=([a-zA-Z0-9_-]{20,})/,/uc\?id=([a-zA-Z0-9_-]{20,})/];
+      for(const p of patterns){const m=text.match(p);if(m&&m[1])return m[1]}
+      if(/^[a-zA-Z0-9_-]{25,}$/.test(text))return text;
+      return '';
+    }
+    function toDriveImageUrl(url){
+      const id=extractDriveId(url);
+      if(id)return 'https://drive.google.com/thumbnail?id='+id+'&sz=w1000';
+      return url||'';
+    }
+    function photoUrl(c){return toDriveImageUrl(c.foto_viso_drive_url || c.foto_figura_intera_drive_url || c.foto || '')}
+    function photoBox(c, big=false){
+      const url=photoUrl(c);
+      const cls=big?'avatar big-avatar':'avatar';
+      if(url)return `<img class="${cls}" src="${h(url)}" alt="${h(c.nome)}" onerror="this.outerHTML='<div class=&quot;${cls}&quot; style=&quot;display:grid;place-items:center;background:rgba(255,255,255,.08);color:var(--muted);font-size:11px;text-align:center;padding:4px&quot;>NO<br>FOTO</div>'">`;
+      return `<div class="${cls}" style="display:grid;place-items:center;background:rgba(255,255,255,.08);color:var(--muted);font-size:11px;text-align:center;padding:4px">NO<br>FOTO</div>`;
+    }
+    function profileCard(c){return `<article class="profile-card" onclick="openCandidate('${h(c.id)}')"><div class="profile-top">${photoBox(c)}<div><strong>${h(c.nome)}</strong><br><small>${h(c.id)} · ${h(c.citta)}</small></div></div><div class="tags"><span class="tag">${h(c.ruolo)}</span><span class="tag">${h(c.stato)}</span><span class="tag">${photoUrl(c)?'foto riconciliata':'foto da riconciliare'}</span></div><div class="score-row"><div class="bar"><span style="width:${Number(c.score)||0}%"></span></div><span class="score">${Number(c.score)||0}%</span></div></article>`}
+
+    function selectJob(id){state.selectedJobId=id;renderJobs()}
+
+    function getSelectedJob(){return state.jobs.find(j=>j.id===state.selectedJobId) || state.jobs[0]}
+    function getMatchesForJob(job){return state.candidates.map(c=>({...c,matchScore:scoreCandidateForJob(c,job)})).filter(c=>c.matchScore >= (Number(job.scoreMin)||0)).sort((a,b)=>b.matchScore-a.matchScore)}
+
+    function renderJobs(){
+      const job = getSelectedJob();
+      if(!job){qs('jobs').innerHTML = empty('Nessun job post disponibile');return}
+      const matches = getMatchesForJob(job);
+      qs('jobs').innerHTML = `<div class="grid job-layout"><div class="card"><h3>Job post</h3><div class="job-list">${state.jobs.map(j=>`<div class="job-card ${j.id===job.id?'active':''}" onclick="selectJob('${h(j.id)}')"><strong>${h(j.titolo)}</strong><p>${h(j.cliente)} · ${h(j.citta)}</p><div class="tags"><span class="tag">${h(j.stato)}</span><span class="tag">Score min ${h(j.scoreMin||0)}</span></div></div>`).join('')}</div></div><div class="card"><h3>Candidati compatibili</h3><p><b>${h(job.titolo)}</b> · ${matches.length} profili suggeriti</p><div class="match-list">${matches.map(c=>`<div class="match-row" onclick="openCandidate('${h(c.id)}')"><img class="avatar" src="${h(photoUrl(c))}"><div><strong>${h(c.nome)}</strong><br><small>${h(c.ruolo)} · ${h(c.citta)} · ${h(c.lingue)}</small></div><span class="score">${c.matchScore}%</span></div>`).join('')||empty('Nessun candidato supera lo score minimo')}</div></div></div>`;
+    }
+
+    function renderPipeline(){
+      const groups = ['Nuovi','Screening','Shortlist','Ingaggiati'];
+      qs('pipeline').innerHTML = `<div class="grid kanban">${groups.map(g=>{const arr=state.candidates.filter(c=>String(c.stato).toLowerCase().includes(g.toLowerCase()));return `<div class="column"><h4>${g}<span>${arr.length}</span></h4>${arr.map(c=>`<div class="mini-card" onclick="openCandidate('${h(c.id)}')"><strong>${h(c.nome)}</strong><small>${h(c.ruolo)} · ${h(c.citta)}</small><div class="score-row"><div class="bar"><span style="width:${Number(c.score)||0}%"></span></div><span class="score">${Number(c.score)||0}%</span></div></div>`).join('')||'<small>Nessun profilo</small>'}</div>`}).join('')}</div>`;
+    }
+
+    function renderLuxury(){
+      const c = filteredCandidates()[0] || state.candidates[0];
+      qs('luxury').innerHTML = c ? luxuryCard(c) : empty('Nessun candidato disponibile');
+    }
+
+    function splitList(v){return String(v||'').split(/[;,]/).map(x=>x.trim()).filter(Boolean)}
+
+    function luxuryCard(c){
+      const lingue = splitList(c.lingue);
+      const esperienze = splitList(c.esperienze);
+      const cert = splitList(c.certificazioni);
+      const disp = splitList(c.disponibilita);
+      const visual = Number(c.visualScore || Math.min(96, Math.round((Number(c.score)||70)*.72 + 22)));
+      return `<div class="luxury-card"><aside class="staff-side"><div class="staff-logo">ALL4U</div><div class="staff-line"><small>ID Staff</small><strong>${h(c.id)}</strong></div><div class="staff-line"><small>Residenza</small><strong>${h(c.citta)}</strong></div><div class="staff-line"><small>Telefono</small><strong>${h(c.telefono)}</strong></div><div class="staff-line"><small>Email</small><strong>${h(c.email)}</strong></div><div class="staff-line"><small>Asset Drive</small><strong>${c.cv_drive_url?'CV OK':'CV mancante'} · ${c.foto_viso_drive_url?'Foto viso OK':'Foto viso mancante'}</strong></div><div style="margin-top:24px"><span class="staff-status"><span class="dot"></span>${h(c.stato || 'Disponibile')}</span></div><div class="staff-line" style="margin-top:26px"><small>Visual Fit</small><strong>${visual}%</strong></div></aside><main class="staff-main"><section><div class="staff-photo-panel"><div class="staff-headshot"><img src="${h(photoUrl(c))}"></div><div class="staff-full"><img src="${h(photoUrl(c))}"></div></div><div class="staff-name-panel"><span class="pill">Visual Fit ${visual}%</span><h2>${h(c.nome).toUpperCase()}</h2><h4>${h(c.ruolo).toUpperCase()}</h4><p>Professionalità, empatia e attenzione ai dettagli per rappresentare al meglio il tuo brand.</p></div></section><section class="grid"><div class="staff-box"><h3>Informazioni generali</h3><div class="info-row"><span>Altezza dichiarata</span><b>${h(c.altezza || '-')}</b></div><div class="info-row"><span>Patente</span><b>${h(c.patente || '-')}</b></div><div class="info-row"><span>Ruolo target</span><b>${h(c.ruolo)}</b></div><div class="info-row"><span>Score profilo</span><b>${h(c.score)}%</b></div><div class="info-row"><span>CV Drive</span><b>${c.cv_drive_url?'Presente':'-'}</b></div><div class="info-row"><span>Foto viso Drive</span><b>${c.foto_viso_drive_url?'Presente':'-'}</b></div><div class="info-row"><span>Foto figura Drive</span><b>${c.foto_figura_intera_drive_url?'Presente':'-'}</b></div></div><div class="staff-box"><h3>Esperienze precedenti</h3>${(esperienze.length?esperienze:['Esperienze da completare']).slice(0,5).map((e,i)=>`<div class="exp-row"><span class="date-pill">${String(i+1).padStart(2,'0')}</span><span>${h(e)}</span></div>`).join('')}</div></section><section class="grid"><div class="staff-box"><h3>Competenze linguistiche</h3>${(lingue.length?lingue:['Italiano']).slice(0,4).map((l,i)=>`<div class="lang-row"><div class="lang-top"><b>${h(l)}</b><span>${i===0?'Madrelingua':'Livello dichiarato'}</span></div><div class="goldbar"><span style="width:${i===0?96:82-i*10}%"></span></div></div>`).join('')}</div><div class="grid cols2"><div class="staff-box"><h3>Certificazioni</h3><p>${(cert.length?cert:['Da completare']).map(h).join('<br>')}</p></div><div class="staff-box"><h3>Disponibilità</h3><p>${(disp.length?disp:['Da verificare']).map(h).join('<br>')}</p></div></div><div class="staff-box"><h3>Visual Score Breakdown</h3><div class="lang-row"><div class="lang-top"><b>Qualità foto</b><span>${visual}%</span></div><div class="goldbar"><span style="width:${visual}%"></span></div></div><div class="lang-row"><div class="lang-top"><b>Coerenza ruolo</b><span>${Math.max(65,visual-6)}%</span></div><div class="goldbar"><span style="width:${Math.max(65,visual-6)}%"></span></div></div><div class="lang-row"><div class="lang-top"><b>Asset completi</b><span>${c.cv_drive_url&&c.foto_viso_drive_url?90:62}%</span></div><div class="goldbar"><span style="width:${c.cv_drive_url&&c.foto_viso_drive_url?90:62}%"></span></div></div></div></section></main></div>`;
+    }
+
+    function openCandidate(id){
+      const c = state.candidates.find(x=>x.id===id);
+      if(!c)return;
+      qs('drawer').innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center"><h3>Scheda candidato</h3><button class="btn" onclick="closeDrawer()">Chiudi</button></div><div style="display:flex;gap:14px;align-items:center">${photoBox(c,true)}<div><h3>${h(c.nome)}</h3><p>${h(c.id)} · ${h(c.ruolo)} · ${h(c.citta)}</p><span class="pill">${h(c.stato)}</span></div></div><div class="detail-grid"><div class="detail-item"><small>Score</small><strong>${h(c.score)}%</strong></div><div class="detail-item"><small>Visual Fit</small><strong>${h(c.visualScore || '-')}%</strong></div><div class="detail-item"><small>Email</small><strong>${h(c.email)}</strong></div><div class="detail-item"><small>Telefono</small><strong>${h(c.telefono)}</strong></div></div><h3 style="margin-top:18px">Job compatibili</h3><div class="match-list">${state.jobs.map(j=>({j,score:scoreCandidateForJob(c,j)})).sort((a,b)=>b.score-a.score).slice(0,5).map(x=>`<div class="asset" onclick="selectJob('${h(x.j.id)}');setSection('jobs');closeDrawer()"><div><strong>${h(x.j.titolo)}</strong><span>${h(x.j.citta)} · ${h(x.j.stato)}</span></div><span class="score">${x.score}%</span></div>`).join('')}</div><div class="actions" style="margin-top:16px"><button class="btn primary" onclick="showLuxuryFor('${h(c.id)}')">Apri Luxury Card</button>${c.cv_drive_url?`<button class="btn" onclick="window.open('${h(c.cv_drive_url)}','_blank')">Apri CV</button>`:''}</div>`;
+      qs('drawer').classList.add('open');
+    }
+
+    function showLuxuryFor(id){state.query=id;closeDrawer();setSection('luxury');renderLuxury()}
+    function closeDrawer(){qs('drawer').classList.remove('open')}
+
+    function showPhotoDiagnostics(){
+      const total=state.candidates.length;
+      const viso=state.candidates.filter(c=>c.foto_viso_drive_url).length;
+      const figura=state.candidates.filter(c=>c.foto_figura_intera_drive_url).length;
+      const noAsset=state.candidates.filter(c=>!c.foto_viso_drive_url&&!c.foto_figura_intera_drive_url).length;
+      const msg='Totale profili: '+total+' | foto viso AC: '+viso+' | foto figura AD: '+figura+' | senza foto: '+noAsset+'. Se i link esistono ma non si vedono, servono permessi Drive pubblici o thumbnail URL.';
+      toast(msg);
+      console.log('Diagnosi foto', {total, viso, figura, noAsset, sample: state.candidates.slice(0,10).map(c=>({nome:c.nome, foto_viso_drive_url:c.foto_viso_drive_url, foto_figura_intera_drive_url:c.foto_figura_intera_drive_url, photoUrl:photoUrl(c)}))});
+    }
+
+    function exportCsv(){
+      const rows = filteredCandidates();
+      const headers = ['id','nome','email','telefono','citta','ruolo','stato','score','lingue'];
+      const csv = [headers.join(',')].concat(rows.map(r=>headers.map(k=>'"'+String(r[k]||'').replace(/"/g,'""')+'"').join(','))).join('\n');
+      const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'master_database_export.csv';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+
+    function val(id){const el=document.getElementById(id);return el?String(el.value||'').trim():''}
+    async function apiPost(payload){
+      const res = await fetch(SCRIPT_URL, {method:'POST', body:JSON.stringify(payload)});
+      const text = await res.text();
+      try{return JSON.parse(text)}catch(err){throw new Error('Risposta non JSON: '+text)}
+    }
+    function simulateJobBuilder(){
+      qs('jbCliente').value='AC Monza'; qs('jbProgetto').value='Monza Hospitality'; qs('jbRuolo').value='Hostess / Steward Hospitality';
+      qs('jbJobCode').value='MONZA_HOSP_001'; qs('jbArea').value='MONZA BRIANZA, MILANO'; qs('jbScoreMin').value='80';
+      qs('jbAutomunita').value='Si'; qs('jbLingue').value='Italiano, Inglese';
+      qs('jbMust').value='CV obbligatorio, Foto viso obbligatoria, Foto figura intera obbligatoria, Privacy obbligatoria, Automunita, Area compatibile, Esperienza hospitality o eventi sportivi, Disponibilità weekend e giorni partita';
+      qs('jbNice').value='Inglese, Esperienza eventi, Standing elevato, Esperienza stadio o corporate hospitality';
+      qs('jbNote').value='Ricerca di figure eleganti, dinamiche e abituate al contatto con ospiti premium in contesto sportivo.';
+      generateJobCopy();
+    }
+    function generateJobCopy(){
+      const cliente=val('jbCliente'), progetto=val('jbProgetto'), ruolo=val('jbRuolo'), area=val('jbArea'), must=val('jbMust'), nice=val('jbNice'), lingue=val('jbLingue');
+      qs('jbTitolo').value = `${ruolo || 'Profilo operativo'} · ${cliente || 'Cliente'} · ${progetto || 'Progetto'}`;
+      qs('jbTesto').value = `Siamo alla ricerca di ${ruolo || 'profili operativi'} per ${cliente || 'un nostro cliente'}, progetto ${progetto || 'evento'}.
+
+Area operativa: ${area || 'da definire'}.
+
+Requisiti principali: ${must || 'CV aggiornato, disponibilità e profilo coerente con la ricerca'}.
+
+Costituiscono titolo preferenziale: ${nice || 'esperienza nel ruolo, affidabilità e standing adeguato'}.
+
+Lingue richieste: ${lingue || 'Italiano'}.
+
+Per candidarti, compila il form con dati aggiornati, CV e foto richieste.`;
+    }
+    async function publishJob(){
+      try{
+        const payload={action:'create_job',cliente:val('jbCliente'),progetto:val('jbProgetto'),ruolo:val('jbRuolo'),ruolo_richiesta:val('jbRuolo'),job_code:val('jbJobCode'),area_ammessa:val('jbArea'),area_operativa:val('jbArea'),zona_lavoro_pubblica:val('jbArea'),score_minimo:val('jbScoreMin'),automunita_obbligatoria:val('jbAutomunita'),lingue_richieste:val('jbLingue'),chiavi_fondamentali:val('jbMust'),must_have:val('jbMust'),chiavi_preferenziali:val('jbNice'),nice_to_have:val('jbNice'),note_selezionatori:val('jbNote'),titolo_annuncio:val('jbTitolo'),annuncio_titolo:val('jbTitolo'),testo_annuncio:val('jbTesto'),annuncio_testo:val('jbTesto'),requisiti_pubblici:'Area operativa: '+val('jbArea')+'\nLingue richieste: '+val('jbLingue')+'\nAutomunita: '+val('jbAutomunita')+'\nRequisiti fondamentali: '+val('jbMust')+'\nRequisiti preferenziali: '+val('jbNice'),documenti_richiesti_pubblici:'CV PDF, foto viso, foto figura intera',stato_posizione:'Aperta',stato_pubblicazione:'Pubblicato',origine_creazione:'Agency Dashboard'};
+        if(!payload.cliente||!payload.progetto||!payload.ruolo_richiesta){toast('Compila almeno cliente, progetto e ruolo');return}
+        const result=await apiPost(payload);
+        if(!result.success) throw new Error(result.message||'Errore creazione job');
+        toast('Job post pubblicato correttamente');
+        await refreshAll(); setSection('jobs');
+      }catch(err){console.error(err);toast('Errore pubblicazione job: '+err.message)}
+    }
+
+    function init(){renderNav();refreshAll()}
+    init();
+  </script>
+</body>
+</html>
